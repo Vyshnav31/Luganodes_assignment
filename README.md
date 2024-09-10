@@ -23,7 +23,6 @@ The **Ethereum Deposit Tracker** is a tool designed to monitor and record ETH de
 - [Alerting and Notifications (Optional)](#alerting-and-notifications-optional)
 - [Grafana Dashboard Setup](#grafana-dashboard-setup)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Objective
 
