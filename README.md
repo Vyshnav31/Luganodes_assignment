@@ -3,6 +3,9 @@ Here’s a comprehensive README file for your Ethereum Deposit Tracker project:
 ---
 
 # Ethereum Deposit Tracker
+![Edit panel - New dashboard - Dashboards - Grafana - Google Chrome 10-09-2024 6 40 11 PM](https://github.com/user-attachments/assets/dae3a3d4-c532-44d3-a982-0183e1c1383a)
+![Edit panel - New dashboard - Dashboards - Grafana - Google Chrome 10-09-2024 6 41 48 PM](https://github.com/user-attachments/assets/c2e5b8d3-12c2-428f-80bf-922e24047a14)
+![eth-deposit-tracker-main - App - Docker Desktop 10-09-2024 6 42 34 PM](https://github.com/user-attachments/assets/7770eadc-221e-4fac-ad52-3cea10a965ff)
 
 ## Overview
 
