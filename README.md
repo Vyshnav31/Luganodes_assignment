@@ -35,7 +35,7 @@ The primary goal of the Ethereum Deposit Tracker is to track and record deposits
 - **Multi-deposit Handling**: Can handle multiple deposits made in a single transaction.
 - **Error Logging and Monitoring**: Tracks and logs errors during execution.
 - **Grafana Dashboard (optional)**: Visualize deposit data and system metrics.
-- **Telegram Notifications (optional)**: Alerts users when new deposits are detected.
+- **Telegram Notifications **: Alerts users when new deposits are detected.
 
 ## Prerequisites
 
