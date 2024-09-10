@@ -1,54 +1,139 @@
-# ETH Deposit Tracker
+Here’s a comprehensive README file for your Ethereum Deposit Tracker project:
 
-The ETH Deposit Tracker is a TypeScript-based application that monitors Ethereum deposits on the blockchain. It tracks deposit transactions, stores them in a MongoDB database, and sends notifications via Telegram when new deposits are detected.
+---
+
+# Ethereum Deposit Tracker
+
+## Overview
+
+The **Ethereum Deposit Tracker** is a tool designed to monitor and record ETH deposits on the Beacon Deposit Contract. The application connects to an Ethereum node using RPC methods, tracks deposits in real-time, stores the relevant deposit data, and optionally provides alerts and visualizations through Grafana and Telegram notifications.
+
+## Table of Contents
+
+- [Objective](#objective)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Schema of Deposit Data](#schema-of-deposit-data)
+- [Error Handling and Logging](#error-handling-and-logging)
+- [Alerting and Notifications (Optional)](#alerting-and-notifications-optional)
+- [Grafana Dashboard Setup](#grafana-dashboard-setup)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Objective
+
+The primary goal of the Ethereum Deposit Tracker is to track and record deposits made to the Beacon Deposit Contract: **`0x00000000219ab540356cBB839Cbe05303d7705Fa`**. It can handle real-time tracking, error logging, and visualization/notification mechanisms.
+
+## Features
+
+- **Real-time Deposit Monitoring**: Connects to Ethereum RPC methods to monitor deposits.
+- **Multi-deposit Handling**: Can handle multiple deposits made in a single transaction.
+- **Error Logging and Monitoring**: Tracks and logs errors during execution.
+- **Grafana Dashboard (optional)**: Visualize deposit data and system metrics.
+- **Telegram Notifications (optional)**: Alerts users when new deposits are detected.
 
 ## Prerequisites
 
-Before you start, ensure you have the following installed:
+To run this project, you need to have the following installed:
 
-- **Node.js**: Version 14 or later.
-- **npm**: Version 6 or later (comes with Node.js).
-- **MongoDB**: Ensure MongoDB is installed and running on the default port `27017`.
+- **Node.js** (v14.x or higher)
+- **npm** (Node package manager)
+- **Alchemy/Infura Account** for Ethereum RPC connection
+- **Docker** (if using Docker for deployment)
+- **MongoDB** (optional, for storage)
+- **Prometheus** and **Grafana** (optional, for monitoring)
+- **Telegram Bot** (optional, for notifications)
 
-### MongoDB Installation
+## Installation
 
-If you don't have MongoDB installed, you can install it using the following steps:
+1. **Clone the repository**:
 
-- **macOS** (using Homebrew):
+    ```bash
+    git clone https://github.com/<your-repo>/eth-deposit-tracker.git
+    cd eth-deposit-tracker
+    ```
 
-  ```bash
-  brew tap mongodb/brew
-  brew install mongodb-community@6.0
-  brew services start mongodb/brew/mongodb-community
-  ```
+2. **Install dependencies**:
 
-  ## Available Scripts
+    ```bash
+    npm install
+    ```
 
-In the project directory, you can run:
+3. **Set up environment variables**:
+   
+   Create a `.env` file in the root directory with the following content:
 
-### `npm run build`
+    ```bash
+    ETH_NODE_URL=<Alchemy/Infura URL>
+    BEACON_CONTRACT_ADDRESS=0x00000000219ab540356cBB839Cbe05303d7705Fa
+    TELEGRAM_BOT_TOKEN=<your-telegram-bot-token>  # Optional for alerts
+    TELEGRAM_CHAT_ID=<your-telegram-chat-id>      # Optional for alerts
+    MONGO_URI=<your-mongo-db-uri>                 # Optional for data storage
+    ```
 
-Compiles the TypeScript code to JavaScript.
+4. **Set up Docker (optional)**:
 
-### `npm run dev`
+    If you wish to use Docker for deployment, create a `docker-compose.yml` file for MongoDB, Prometheus, Grafana, and the deposit tracker service.
 
-## Architecture
+    Run:
 
-This project was developed using Clean Architecture principles along with SOLID design principles. The Clean Architecture approach ensures separation of concerns and independence of frameworks, making the system more maintainable, scalable, and testable. The application is structured into layers:
+    ```bash
+    docker-compose up -d
+    ```
 
-1. Entities: Core business logic and domain models.
-2. Use Cases: Application-specific business rules.
-3. Interface Adapters: Presenters, controllers, and gateways.
-4. Frameworks and Drivers: External frameworks and tools (database, web framework, etc.).
+## Usage
 
-SOLID principles were applied throughout the development:
+1. **Start the application**:
 
-- Single Responsibility Principle: Each class and module has a single, well-defined responsibility.
-- Open-Closed Principle: The system is open for extension but closed for modification.
-- Liskov Substitution Principle: Objects of a superclass are replaceable with objects of its subclasses without affecting the correctness of the program.
-- Interface Segregation Principle: Clients are not forced to depend on interfaces they do not use.
-- Dependency Inversion Principle: High-level modules do not depend on low-level modules. Both depend on abstractions.
+    ```bash
+    npm start
+    ```
 
-## Flexibility
+2. The application will start tracking Ethereum deposits to the Beacon Deposit Contract and log relevant details such as `blockNumber`, `timestamp`, `amount`, etc.
 
-The ETH Deposit Tracker was designed with flexibility in mind. It can be easily configured to listen for any token from any blockchain by simply configuring a context for each one. This modular approach allows for easy expansion to support multiple cryptocurrencies and blockchains without significant changes to the core architecture.
+3. For testing, use the example transactions below to verify deposit tracking:
+
+    - Deposit Transaction: `0x1391be19259f10e01336a383217cf35344dd7aa157e95030f46235448ef5e5d6`
+    - Deposit through Contract: `0x53c98c3371014fd54275ebc90a6e42dffa2eee427915cab5f80f1e3e9c64eba4`
+
+## Schema of Deposit Data
+
+Here is the schema used for saving deposit details:
+
+```json
+Deposit {
+    blockNumber: Integer,
+    blockTimestamp: String,
+    fee: String,
+    hash: String,
+    pubkey: String
+}
+```
+
+## Error Handling and Logging
+
+The application has built-in error handling and logging. Every RPC interaction is wrapped in try-catch blocks to handle and log any errors encountered. Logs can be found in the `/logs` directory.
+
+You can also use external logging services like **Winston** or **Loggly** for additional log management.
+
+## Alerting and Notifications (Optional)
+
+If enabled, the tracker sends notifications when new deposits are detected. Telegram alerts are set up using a bot. To enable this feature:
+
+1. **Create a Telegram Bot**: Follow [this guide](https://core.telegram.org/bots#3-how-do-i-create-a-bot) to set up a bot and get the `BOT_TOKEN` and `CHAT_ID`.
+
+2. **Enable Alerts**: Add the `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` in the `.env` file.
+
+## Grafana Dashboard Setup
+
+1. **Install Prometheus**: Set up a Prometheus service to collect data metrics from the Ethereum Deposit Tracker.
+
+2. **Set up Grafana**: Visualize the collected data using a Grafana dashboard.
+
+3. **Create a Dashboard**: Import a custom dashboard or create one from scratch to track deposit data in real-time.
+
+## Contributing
+
+If you would like to contribute to this project, feel free to fork the repository and submit a pull request.
